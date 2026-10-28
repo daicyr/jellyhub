@@ -53,40 +53,30 @@ pipeline {
                 sh 'bun run test'
             }
         }
+
+        /***********/
+        /* Staging */
+        /***********/
         stage('Staging - Build Image') {
             when {
                 branch 'develop'
             }
             steps {
-                sh """
-                    docker compose build
-                    docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:${TAG}
-                    docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:latest
-                    docker image rm ${APP_NAME}:latest
-                """
-            }
-        }
-        stage('Production - Build Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                // build docker image
-                echo 'build docker image'
+                withCredentials([file(credentialsId: 'jellyhub_STAGING_ENV', variable: 'ENV_FILE')]) {
+                    sh '''
+                        cp $ENV_FILE .env
+                        npm run build
+                        docker compose build
+                        docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:${TAG}
+                        docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:latest
+                        docker image rm ${APP_NAME}:latest
+                    '''
+                }
             }
         }
         stage('Staging - Analyze Image') {
             when {
                 branch 'develop'
-            }
-            steps {
-                // analyze docker image with trivy scan
-                echo 'analyze docker image with trivy scan'
-            }
-        }
-        stage('Production - Analyze Image') {
-            when {
-                branch 'main'
             }
             steps {
                 // analyze docker image with trivy scan
@@ -112,6 +102,28 @@ pipeline {
                     docker image rm staging-${DOCKER_IMAGE}:${TAG}
                     docker image rm staging-${DOCKER_IMAGE}:latest
                 """
+            }
+        }
+
+        /**************/
+        /* Production */
+        /**************/
+        stage('Production - Build Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                // build docker image
+                echo 'build docker image'
+            }
+        }
+        stage('Production - Analyze Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                // analyze docker image with trivy scan
+                echo 'analyze docker image with trivy scan'
             }
         }
         stage('Production - Push image to ghcr.io') {
