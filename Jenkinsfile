@@ -12,12 +12,15 @@ pipeline {
             }
         }
 
-        stage('Setup') {
-            // setup bun
+        stage('Setup Bun') {
             steps {
                 sh """
-                    curl -fsSL https://bun.sh/install | bash
-                    bun install --frozen-lockfile
+                    docker run --rm \
+                      -v ${WORKSPACE}:/app \
+                      -w /app \
+                      -u $(id -u):$(id -g) \
+                      oven/bun:latest \
+                      sh -c "bun --version && bun install --frozen-lockfile"
                 """
             }
         }
