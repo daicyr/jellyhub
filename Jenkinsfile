@@ -32,11 +32,10 @@ pipeline {
         // format
         }
         stage('Build') {
+        // Build
         }
         stage('Tests') {
         // run tests
-        }
-        // build app
         }
         stage('Tests') {
         // run tests
