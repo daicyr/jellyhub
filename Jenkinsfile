@@ -28,36 +28,43 @@ pipeline {
         stage('Lint') {
             steps {
                 // lint
+                echo 'lint'
             }
         }
         stage('Fmt') {
             steps {
                 // format
+                echo 'format'
             }
         }
         stage('Build') {
             steps {
                 // Build
+                echo 'Build'
             }
         }
         stage('Tests') {
             steps {
                 // run tests
+                echo 'run tests'
             }
         }
         stage('Build Image') {
             steps {
                 // build docker image
+                echo 'build docker image'
             }
         }
         stage('Analyze Image') {
             steps {
                 // analyze docker image with trivy scan
+                echo 'analyze docker image with trivy scan'
             }
         }
         stage('Push image to ghcr.io') {
             steps {
                 // push image to github container registry
+                echo 'push image to github container registry'
             }
         }
     }
