@@ -9,7 +9,7 @@ pipeline {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
         APP_NAME = "jellyhub-app"
-        DOCKER_IMAGE = "daicy/jellyhub-app"
+        DOCKER_USER = "daicyr"
         TAG = "${env.BUILD_NUMBER}"
     }
 
@@ -67,8 +67,8 @@ pipeline {
                         cp $ENV_FILE .env
                         npm run build
                         docker compose build
-                        docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:${TAG}
-                        docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:latest
+                        docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
+                        docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
                         docker image rm ${APP_NAME}:latest
                     '''
                 }
@@ -94,13 +94,13 @@ pipeline {
                 echo 'push image to github container registry'
                 script {
                     docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
-                        docker.image("staging-${DOCKER_IMAGE}:${TAG}").push()
-                        docker.image("staging-${DOCKER_IMAGE}:latest").push()
+                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
+                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
                     }
                 }
                 sh """
-                    docker image rm staging-${DOCKER_IMAGE}:${TAG}
-                    docker image rm staging-${DOCKER_IMAGE}:latest
+                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
                 """
             }
         }
