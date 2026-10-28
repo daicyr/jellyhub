@@ -9,7 +9,7 @@
     "start": "bun --bun .output/server/index.mjs",
     "lint": "eslint",
     "db:generate": "bun --bun drizzle-kit generate",
-    "db:migrate": "bun --bun drizzle-kit migrate"
+    "db:migrate": "bun src/lib/db/migrate.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

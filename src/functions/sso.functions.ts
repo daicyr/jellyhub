@@ -48,11 +48,11 @@ export const deleteSsoProvider = createServerFn({ method: "POST" })
     }
 
     try {
-      ctx.db.transaction((tx) => {
-        tx.delete(account).where(eq(account.providerId, data.providerId)).run();
-        tx.delete(ssoProviderSchema)
-          .where(eq(ssoProviderSchema.providerId, data.providerId))
-          .run();
+      await ctx.db.transaction(async (tx) => {
+        await tx.delete(account).where(eq(account.providerId, data.providerId));
+        await tx
+          .delete(ssoProviderSchema)
+          .where(eq(ssoProviderSchema.providerId, data.providerId));
       });
     } catch (error) {
       throw new Error("Failed to delete SSO provider");

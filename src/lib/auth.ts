@@ -13,7 +13,7 @@ const baseUrl = process.env.APP_URL || "http://localhost:3000";
 export const auth = betterAuth({
   appName: "Jellyhub",
   secret: process.env.AUTH_SECRET as string,
-  baseUrl,
+  baseURL: baseUrl,
   trustedOrigins: async (request) => {
     if (!request) {
       return [baseUrl];
@@ -68,7 +68,7 @@ export const auth = betterAuth({
     },
   },
   database: drizzleAdapter(db, {
-    provider: "sqlite",
+    provider: "pg",
     schema,
   }),
   user: {

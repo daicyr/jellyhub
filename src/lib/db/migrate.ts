@@ -1,4 +1,8 @@
-import { migrate } from "drizzle-orm/bun-sqlite/migrator";
+import { migrate } from "drizzle-orm/bun-sql/migrator";
 import db from ".";
 
-migrate(db, { migrationsFolder: "./drizzle" });
+try {
+  await migrate(db, { migrationsFolder: "./drizzle/postgresql" });
+} finally {
+  await db.$client.close();
+}

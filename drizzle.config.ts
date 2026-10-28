@@ -1,16 +1,10 @@
 import { defineConfig } from "drizzle-kit";
 
-export const dbFile = process.env.DB_FILE
-  ? process.env.DB_FILE
-  : process.env.NODE_ENV === "production"
-    ? "/app/data/jellyhub.db"
-    : "jellyhub.db";
-
 export default defineConfig({
-  out: "./drizzle",
+  out: "./drizzle/postgresql",
   schema: "./src/lib/db/schema.ts",
-  dialect: "sqlite",
+  dialect: "postgresql",
   dbCredentials: {
-    url: dbFile,
+    url: process.env.DATABASE_URL!,
   },
 });

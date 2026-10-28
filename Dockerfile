@@ -14,8 +14,7 @@ RUN bun build src/lib/db/migrate.ts --target bun --outdir ./.output
 
 FROM base AS runner
 COPY --from=builder /app/.output ./.output
-COPY --from=builder /app/drizzle ./drizzle
-RUN mkdir -p /app/data && chown -R bun:bun /app/data
+COPY --from=builder /app/drizzle/postgresql ./drizzle/postgresql
 
 USER bun
 EXPOSE 3000/tcp
