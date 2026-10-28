@@ -16,5 +16,8 @@ spec:
       containers:
         - name: jellyhub
           image: zigleur/jellyhub:latest
+          envFrom:
+            - secretRef:
+                name: jellyhub-env
           ports:
             - containerPort: 3000

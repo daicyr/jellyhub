@@ -5,6 +5,11 @@
 pipeline {
     agent any
 
+    environment {
+        BUN_INSTALL = "${WORKSPACE}/.bun"
+        PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -14,11 +19,8 @@ pipeline {
 
         stage('Setup Bun') {
             steps {
-                echo "Setup bun"
-                sh """
-                    curl -fsSL https://bun.sh/install | bash
-                    bun -v
-                """
+                sh 'curl -fsSL https://bun.sh/install | bash -s "bun-v1.1.34"'
+                sh 'bun --version'
             }
         }
         stage('Lint') {
