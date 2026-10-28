@@ -7,3 +7,6 @@ dist/
 .env.*.local
 
 jellyhub.db
+
+playwright-report/
+test-results/

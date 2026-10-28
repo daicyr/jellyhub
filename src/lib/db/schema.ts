@@ -1,7 +1,7 @@
 import { defineRelations } from "drizzle-orm";
 import {
-  index,
   boolean,
+  index,
   pgTable,
   text,
   timestamp,
@@ -67,7 +67,8 @@ export const account = pgTable(
     id: text("id")
       .primaryKey()
       .$defaultFn(() => Bun.randomUUIDv7()),
-    issuer: text("issuer").notNull(),
+    // Preserve values from Better Auth 1.7.0–1.7.2; newer versions omit issuer.
+    issuer: text("issuer"),
     accountId: text("account_id").notNull(),
     providerId: text("provider_id").notNull(),
     userId: text("user_id")
@@ -95,8 +96,8 @@ export const account = pgTable(
       .notNull(),
   },
   (table) => [
-    uniqueIndex("account_issuer_accountId_uidx").on(
-      table.issuer,
+    uniqueIndex("account_providerId_accountId_uidx").on(
+      table.providerId,
       table.accountId,
     ),
     index("account_userId_idx").on(table.userId),
