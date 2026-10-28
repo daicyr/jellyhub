@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyhub
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jellyhub
+    spec:
+      containers:
+        - name: jellyhub
+          image: zigl3ur/jellyhub:latest
+          ports:
+            - containerPort: 3000
