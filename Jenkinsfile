@@ -16,7 +16,7 @@ pipeline {
             steps {
                 echo "Setup bun"
                 sh """
-                    apt-install unzip -y
+                    apt install unzip -y
                     curl -fsSL https://bun.sh/install | bash
                 """
             }
