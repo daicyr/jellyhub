@@ -102,4 +102,12 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            echo 'Pipeline succeed'
+        }
+        failure {
+            echo 'Pipeline failed'
+        }
+    }
 }
