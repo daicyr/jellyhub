@@ -1,6 +1,7 @@
+import { useState } from "react";
+import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import Skeleton from "../ui/skeleton";
-import { useState } from "react";
 import {
   Menu,
   MenuContent,
@@ -11,11 +12,10 @@ import {
   MenuTrigger,
 } from "../ui/menu";
 import Button from "../ui/button";
-import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImg } from "../ui/avatar";
 import DeleteUserDialog from "./delete-user-dialog";
 import UserEditDialog from "./user-edit-dialog";
-import { Avatar, AvatarFallback, AvatarImg } from "../ui/avatar";
-import { authClient } from "@/lib/auth-client";
+import type { authClient } from "@/lib/auth-client";
 
 interface UserCardProps {
   actualUserId: string;

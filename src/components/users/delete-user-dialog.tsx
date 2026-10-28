@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -13,7 +14,6 @@ import LoaderIcon from "../ui/loader-icon";
 import { Alert } from "../ui/alert";
 import type { Dialog as BaseDialog } from "@base-ui/react";
 import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
 
 interface RemoveServerDialogProps extends BaseDialog.Root.Props {
   user: typeof authClient.$Infer.Session.user;

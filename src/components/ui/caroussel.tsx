@@ -1,5 +1,6 @@
-import { useRef, type PropsWithChildren } from "react";
+import {  useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import type {PropsWithChildren} from "react";
 
 export function Carousel({ children }: PropsWithChildren) {
   const scrollRef = useRef<HTMLDivElement>(null);

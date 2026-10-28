@@ -6,6 +6,7 @@ export default [
   {
     rules: {
       "no-shadow": "off",
+      "@typescript-eslint/no-unnecessary-condition": "off"
     },
   },
   globalIgnores(["node_modules", ".output"]),

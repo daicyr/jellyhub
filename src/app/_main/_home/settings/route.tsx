@@ -1,9 +1,10 @@
-import { Link } from "@/components/ui/link";
 import {
-  createFileRoute,
+  
   Outlet,
-  type LinkProps,
+  createFileRoute
 } from "@tanstack/react-router";
+import type {LinkProps} from "@tanstack/react-router";
+import { Link } from "@/components/ui/link";
 
 export const Route = createFileRoute("/_main/_home/settings")({
   component: RouteComponent,

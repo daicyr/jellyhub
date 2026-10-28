@@ -1,11 +1,11 @@
 import { X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import Fuse from "fuse.js";
 import Button from "./ui/button";
 import { Input, InputAddon } from "./ui/input";
-import type { ServersItems } from "@/functions/jellyfin.functions";
-import { useEffect, useMemo, useState } from "react";
-import { useDebounce } from "@/hooks/use-debounce";
-import Fuse from "fuse.js";
 import LoaderIcon from "./ui/loader-icon";
+import type { ServersItems } from "@/functions/jellyfin.functions";
+import { useDebounce } from "@/hooks/use-debounce";
 
 interface SearchBarProps {
   className?: string;

@@ -1,5 +1,5 @@
-import { getJellyData } from "@/functions/server.functions";
 import { queryOptions } from "@tanstack/react-query";
+import { getJellyData } from "@/functions/server.functions";
 
 export const jellyDataQueryOptions = queryOptions({
   queryKey: ["jellydata"],

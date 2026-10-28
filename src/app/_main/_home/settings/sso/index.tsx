@@ -1,13 +1,13 @@
-import AddSsoDialog from "@/components/sso/add-sso-dialog";
-import {
-  SsoProviderCard,
-  SsoProviderCardSkeleton,
-} from "@/components/sso/sso-provider-card";
-import { ssoProvidersQueryOptions } from "@/queries/sso";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { KeyRound } from "lucide-react";
 import { Suspense } from "react";
+import { ssoProvidersQueryOptions } from "@/queries/sso";
+import {
+  SsoProviderCard,
+  SsoProviderCardSkeleton,
+} from "@/components/sso/sso-provider-card";
+import AddSsoDialog from "@/components/sso/add-sso-dialog";
 
 export const Route = createFileRoute("/_main/_home/settings/sso/")({
   beforeLoad: ({ context }) => {

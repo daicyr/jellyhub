@@ -10,10 +10,10 @@ import {
 } from "../ui/dialog";
 import { Alert } from "../ui/alert";
 import LoaderIcon from "../ui/loader-icon";
+import Badge from "../ui/badge";
 import type { JellyfinServer } from "@/types";
 import type { Dialog as BaseDialog } from "@base-ui/react";
 import { invalidateServerTokenDB } from "@/functions/jellyfin.functions";
-import Badge from "../ui/badge";
 
 interface InvalidateTokenDialogProps extends BaseDialog.Root.Props {
   server: JellyfinServer;

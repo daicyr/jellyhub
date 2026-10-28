@@ -1,16 +1,17 @@
 import { useState } from "react";
-import Button from "../ui/button";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import {
-  resetPasswdSchema,
-  type resetPasswdType,
-} from "@/schemas/settings.schema";
+import { Eye, EyeOff } from "lucide-react";
+import Button from "../ui/button";
 import { FieldError, FieldLabel, FieldRoot } from "../ui/field";
 import { Input, InputAddon } from "../ui/input";
 import LoaderIcon from "../ui/loader-icon";
-import { Eye, EyeOff } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
 import { Alert } from "../ui/alert";
+import type {resetPasswdType} from "@/schemas/settings.schema";
+import { authClient } from "@/lib/auth-client";
+import {
+  resetPasswdSchema
+  
+} from "@/schemas/settings.schema";
 
 const defaultValues: resetPasswdType = {
   currentPassword: "",

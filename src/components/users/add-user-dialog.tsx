@@ -17,7 +17,8 @@ import { FieldError, FieldLabel, FieldRoot } from "../ui/field";
 import { Input, InputAddon } from "../ui/input";
 import { Alert } from "../ui/alert";
 import LoaderIcon from "../ui/loader-icon";
-import { registerSchema, type registerSchemaType } from "@/schemas/auth.schema";
+import type {registerSchemaType} from "@/schemas/auth.schema";
+import { registerSchema  } from "@/schemas/auth.schema";
 import { authClient } from "@/lib/auth-client";
 
 const defaultValues: registerSchemaType = {

@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import {  Suspense } from "react";
+import { SearchX, ServerOff } from "lucide-react";
+import { cn } from "@sglara/cn";
+import type {ComponentProps} from "react";
+import type { ItemTypes, ItemsOpts } from "@/types";
 import ItemCard, { ItemCardLoading } from "@/components/item/item-card";
 import { itemsQueryOptions } from "@/queries/servers";
 import { jellyDataQueryOptions } from "@/queries/jellydata";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Suspense, type ComponentProps } from "react";
 import { Carousel } from "@/components/ui/caroussel";
-import { SearchX, ServerOff } from "lucide-react";
-import type { ItemsOpts, ItemTypes } from "@/types";
-import { cn } from "@sglara/cn";
 import { Link } from "@/components/ui/link";
 import Button from "@/components/ui/button";
 

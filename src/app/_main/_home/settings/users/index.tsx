@@ -1,9 +1,9 @@
-import AddUserDialog from "@/components/users/add-user-dialog";
-import { UserCard, UserCardSkeleton } from "@/components/users/users-card";
-import { usersListQueryOptions } from "@/queries/users";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Suspense } from "react";
+import AddUserDialog from "@/components/users/add-user-dialog";
+import { UserCard, UserCardSkeleton } from "@/components/users/users-card";
+import { usersListQueryOptions } from "@/queries/users";
 
 export const Route = createFileRoute("/_main/_home/settings/users/")({
   beforeLoad: ({ context }) => {
