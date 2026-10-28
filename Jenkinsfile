@@ -14,13 +14,10 @@ pipeline {
 
         stage('Setup Bun') {
             steps {
+                echo "Setup bun"
                 sh """
-                    docker run --rm \
-                      -v ${WORKSPACE}:/app \
-                      -w /app \
-                      -u $(id -u):$(id -g) \
-                      oven/bun:latest \
-                      sh -c "bun --version && bun install --frozen-lockfile"
+                    apt-install unzip -y
+                    curl -fsSL https://bun.sh/install | bash
                 """
             }
         }
