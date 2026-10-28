@@ -8,6 +8,9 @@ pipeline {
     environment {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
+        APP_NAME = "jellyhub-app"
+        DOCKER_IMAGE = "daicy/jellyhub-app"
+        TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -50,19 +53,17 @@ pipeline {
                 sh 'bun run test'
             }
         }
-        stage('Build') {
-            steps {
-                // Build
-                echo 'Build'
-            }
-        }
         stage('Staging - Build Image') {
             when {
                 branch 'develop'
             }
             steps {
-                // build docker image
-                echo 'build docker image'
+                sh """
+                    docker compose build
+                    docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:${TAG}
+                    docker tag ${APP_NAME} staging-${DOCKER_IMAGE}:latest
+                    docker image rm ${APP_NAME}:latest
+                """
             }
         }
         stage('Production - Build Image') {
@@ -96,9 +97,21 @@ pipeline {
             when {
                 branch 'develop'
             }
+            environment {
+                registryCredential = 'docker-hub-auth'
+            }
             steps {
-                // push image to github container registry
                 echo 'push image to github container registry'
+                script {
+                    docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
+                        docker.image("staging-${DOCKER_IMAGE}:${TAG}").push()
+                        docker.image("staging-${DOCKER_IMAGE}:latest").push()
+                    }
+                }
+                sh """
+                    docker image rm staging-${DOCKER_IMAGE}:${TAG}
+                    docker image rm staging-${DOCKER_IMAGE}:latest
+                """
             }
         }
         stage('Production - Push image to ghcr.io') {
