@@ -26,25 +26,39 @@ pipeline {
             }
         }
         stage('Lint') {
-        // lint
+            steps {
+                // lint
+            }
         }
         stage('Fmt') {
-        // format
+            steps {
+                // format
+            }
         }
         stage('Build') {
-        // Build
+            steps {
+                // Build
+            }
         }
         stage('Tests') {
-        // run tests
+            steps {
+                // run tests
+            }
         }
         stage('Build Image') {
-        // build docker image
+            steps {
+                // build docker image
+            }
         }
         stage('Analyze Image') {
-        // analyze docker image with trivy scan
+            steps {
+                // analyze docker image with trivy scan
+            }
         }
         stage('Push image to ghcr.io') {
-        // push image to github container registry
+            steps {
+                // push image to github container registry
+            }
         }
     }
 }
