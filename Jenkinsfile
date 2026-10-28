@@ -3,11 +3,7 @@
 // push / merge dans main, ci/cd complete + deploy en prod
 
 pipeline {
-    agent {
-        docker {
-            image 'node:26-alpine'
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
