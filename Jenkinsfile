@@ -7,7 +7,10 @@ pipeline {
 
     stages {
         stage('Setup') {
-        // setup bun
+            sh """
+            curl -fsSL https://bun.com/install | bash
+            bun -
+            """
         }
         stage('Lint') {
         // lint
