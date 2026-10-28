@@ -3,14 +3,27 @@
 // push / merge dans main, ci/cd complete + deploy en prod
 
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:26-alpine'
+        }
+    }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Setup') {
-            sh """
-            curl -fsSL https://bun.com/install | bash
-            bun -
-            """
+            // setup bun
+            steps {
+                sh """
+                    curl -fsSL https://bun.sh/install | bash
+                    bun install --frozen-lockfile
+                """
+            }
         }
         stage('Lint') {
         // lint
