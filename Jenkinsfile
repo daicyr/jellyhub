@@ -37,7 +37,6 @@ pipeline {
         }
         stage('Lint') {
             steps {
-                sh 'node -v'
                 sh 'bun run lint'
             }
         }
