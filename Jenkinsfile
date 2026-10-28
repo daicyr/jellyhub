@@ -25,6 +25,7 @@ pipeline {
                     else
                         echo 'Installing Bun...'
                         curl -fsSL https://bun.sh/install | bash -s 'bun-v1.1.34'
+                    fi
                     bun --version
                 """
             }
