@@ -21,5 +21,14 @@ pipeline {
         stage('Tests') {
         // run tests
         }
+        stage('Build Image') {
+        // build docker image
+        }
+        stage('Analyze Image') {
+        // analyze docker image with trivy scan
+        }
+        stage('Push image to ghcr.io') {
+        // push image to github container registry
+        }
     }
 }
