@@ -59,7 +59,7 @@ pipeline {
         /***********/
         stage('Staging - Build Image') {
             when {
-                branch 'develop'
+                branch 'staging'
             }
             steps {
                 withCredentials([file(credentialsId: 'jellyhub_STAGING_ENV', variable: 'ENV_FILE')]) {
@@ -76,7 +76,7 @@ pipeline {
         }
         stage('Staging - Analyze Image') {
             when {
-                branch 'develop'
+                branch 'staging'
             }
             steps {
                 // analyze docker image with trivy scan
@@ -85,7 +85,7 @@ pipeline {
         }
         stage('Staging - Push image to ghcr.io') {
             when {
-                branch 'develop'
+                branch 'staging'
             }
             environment {
                 registryCredential = 'docker-hub-auth'
@@ -110,7 +110,7 @@ pipeline {
         /**************/
         stage('Production - Build Image') {
             when {
-                branch 'main'
+                branch 'production'
             }
             steps {
                 // build docker image
@@ -119,7 +119,7 @@ pipeline {
         }
         stage('Production - Analyze Image') {
             when {
-                branch 'main'
+                branch 'production'
             }
             steps {
                 // analyze docker image with trivy scan
@@ -128,7 +128,7 @@ pipeline {
         }
         stage('Production - Push image to ghcr.io') {
             when {
-                branch 'main'
+                branch 'production'
             }
             steps {
                 // push image to github container registry
