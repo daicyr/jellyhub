@@ -37,7 +37,6 @@ pipeline {
         }
         stage('Lint') {
             steps {
-                sh 'docker -v'
                 sh 'bun run lint'
             }
         }
