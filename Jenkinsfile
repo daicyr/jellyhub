@@ -37,14 +37,14 @@ pipeline {
         }
         stage('Lint') {
             steps {
-                // lint
-                echo 'lint'
+                sh 'bun run lint'
             }
         }
         stage('Fmt') {
             steps {
                 // format
                 echo 'format'
+                sh 'docker -v'
             }
         }
         stage('Build') {
