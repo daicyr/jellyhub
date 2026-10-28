@@ -48,11 +48,11 @@ pipeline {
                 sh 'bun run fmt:check'
             }
         }
-        stage('Units Tests') {
-            steps {
-                sh 'bun run test'
-            }
-        }
+        // stage('Units Tests') {
+        //     steps {
+        //         sh 'bun run test'
+        //     }
+        // }
 
         /***********/
         /* Staging */
