@@ -37,9 +37,6 @@ pipeline {
         stage('Tests') {
         // run tests
         }
-        stage('Tests') {
-        // run tests
-        }
         stage('Build Image') {
         // build docker image
         }
