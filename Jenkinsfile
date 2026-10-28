@@ -5,10 +5,6 @@
 pipeline {
     agent any
 
-    triggers {
-        githubPush()
-    }
-
     environment {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
@@ -51,19 +47,55 @@ pipeline {
                 echo 'run tests'
             }
         }
-        stage('Build Image') {
+        stage('Staging - Build Image') {
+            when {
+                branch 'develop'
+            }
             steps {
                 // build docker image
                 echo 'build docker image'
             }
         }
-        stage('Analyze Image') {
+        stage('Production - Build Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                // build docker image
+                echo 'build docker image'
+            }
+        }
+        stage('Staging - Analyze Image') {
+            when {
+                branch 'develop'
+            }
             steps {
                 // analyze docker image with trivy scan
                 echo 'analyze docker image with trivy scan'
             }
         }
-        stage('Push image to ghcr.io') {
+        stage('Production - Analyze Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                // analyze docker image with trivy scan
+                echo 'analyze docker image with trivy scan'
+            }
+        }
+        stage('Staging - Push image to ghcr.io') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                // push image to github container registry
+                echo 'push image to github container registry'
+            }
+        }
+        stage('Production - Push image to ghcr.io') {
+            when {
+                branch 'main'
+            }
             steps {
                 // push image to github container registry
                 echo 'push image to github container registry'
