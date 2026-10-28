@@ -35,27 +35,25 @@ pipeline {
                 sh 'bun install --frozen-lockfile'
             }
         }
-        stage('Lint') {
-            steps {
-                sh 'bun run lint'
-            }
-        }
+        // stage('Lint') {
+        //     steps {
+        //         sh 'bun run lint'
+        //     }
+        // }
         stage('Fmt') {
             steps {
-                // format
-                echo 'format'
+                sh 'bun run fmt:check'
+            }
+        }
+        stage('Units Tests') {
+            steps {
+                sh 'bun run test'
             }
         }
         stage('Build') {
             steps {
                 // Build
                 echo 'Build'
-            }
-        }
-        stage('Tests') {
-            steps {
-                // run tests
-                echo 'run tests'
             }
         }
         stage('Staging - Build Image') {

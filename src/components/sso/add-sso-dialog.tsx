@@ -18,9 +18,9 @@ import { FieldError, FieldLabel, FieldRoot } from "../ui/field";
 import { Input, InputAddon } from "../ui/input";
 import { Alert } from "../ui/alert";
 import LoaderIcon from "../ui/loader-icon";
-import type {addSsoSchemaType} from "@/schemas/settings.schema";
+import type { addSsoSchemaType } from "@/schemas/settings.schema";
 import { authClient } from "@/lib/auth-client";
-import { addSsoSchema  } from "@/schemas/settings.schema";
+import { addSsoSchema } from "@/schemas/settings.schema";
 
 const defaultValues: addSsoSchemaType = {
   providerId: "",

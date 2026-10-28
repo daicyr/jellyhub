@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import {  Suspense } from "react";
+import { Suspense } from "react";
 import { SearchX, ServerOff } from "lucide-react";
 import { cn } from "@sglara/cn";
-import type {ComponentProps} from "react";
+import type { ComponentProps } from "react";
 import type { ItemTypes, ItemsOpts } from "@/types";
 import ItemCard, { ItemCardLoading } from "@/components/item/item-card";
 import { itemsQueryOptions } from "@/queries/servers";

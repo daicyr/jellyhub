@@ -6,12 +6,9 @@ import { FieldError, FieldLabel, FieldRoot } from "../ui/field";
 import { Input, InputAddon } from "../ui/input";
 import LoaderIcon from "../ui/loader-icon";
 import { Alert } from "../ui/alert";
-import type {resetPasswdType} from "@/schemas/settings.schema";
+import type { resetPasswdType } from "@/schemas/settings.schema";
 import { authClient } from "@/lib/auth-client";
-import {
-  resetPasswdSchema
-  
-} from "@/schemas/settings.schema";
+import { resetPasswdSchema } from "@/schemas/settings.schema";
 
 const defaultValues: resetPasswdType = {
   currentPassword: "",

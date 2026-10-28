@@ -25,8 +25,8 @@ import {
 } from "../ui/select";
 import AvatarEditor from "./avatar-editor";
 import type { Dialog as BaseDialog } from "@base-ui/react";
-import type {editUserSchemaType} from "@/schemas/auth.schema";
-import { editUserSchema  } from "@/schemas/auth.schema";
+import type { editUserSchemaType } from "@/schemas/auth.schema";
+import { editUserSchema } from "@/schemas/auth.schema";
 import { authClient } from "@/lib/auth-client";
 
 interface UserEditDialogProps extends BaseDialog.Root.Props {
