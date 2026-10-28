@@ -16,6 +16,10 @@ pipeline {
         // format
         }
         stage('Build') {
+        }
+        stage('Tests') {
+        // run tests
+        }
         // build app
         }
         stage('Tests') {
