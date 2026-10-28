@@ -19,8 +19,19 @@ pipeline {
 
         stage('Setup Bun') {
             steps {
-                sh 'curl -fsSL https://bun.sh/install | bash -s "bun-v1.1.34"'
-                sh 'bun --version'
+                sh """
+                    if command -v bun &> /dev/null; then
+                        echo 'Bun already installed. Skipping installation.'
+                    else
+                        echo 'Installing Bun...'
+                        curl -fsSL https://bun.sh/install | bash -s 'bun-v1.1.34'
+                    bun --version
+                """
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                sh 'bun install --frozen-lockfile'
             }
         }
         stage('Lint') {
