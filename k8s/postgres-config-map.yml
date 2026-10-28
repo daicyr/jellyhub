@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: db-secret-credentials
-  namespace: jellyhub
+  namespace: default
   labels:
     app: postgresdb
 data:
