@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: db-persistent-volume-claim
+  namespace: jellyhub
 spec:
   storageClassName: manual
   accessModes:
