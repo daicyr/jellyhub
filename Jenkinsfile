@@ -8,19 +8,12 @@ pipeline {
     environment {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
-        APP_NAME = "jellyhub-app"
-        DOCKER_USER = "daicyr"
+        APP_NAME = 'jellyhub-app'
+        DOCKER_USER = 'daicyr'
+        TAG = "${env.GIT_COMMIT.take(8)}"
     }
 
     stages {
-        stage('Configure env variables') {
-            steps {
-                script {
-                    env.TAG = "${env.GIT_COMMIT.take(8)}"
-                }
-            }
-        }
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -71,7 +64,7 @@ pipeline {
         /***********/
         stage('Staging - Build Docker image') {
             when {
-                branch 'staging'
+                branch 'develop'
             }
             steps {
                 sh """
@@ -83,7 +76,7 @@ pipeline {
         }
         stage('Staging - Analyze Image') {
             when {
-                branch 'staging'
+                branch 'develop'
             }
             steps {
                 sh """
@@ -99,7 +92,7 @@ pipeline {
         }
         stage('Staging - Push Docker image to DockerHub') {
             when {
-                branch 'staging'
+                branch 'develop'
             }
             environment {
                 registryCredential = 'DOCKER_HUB_CREDENTIALS'
@@ -114,12 +107,30 @@ pipeline {
             }
         }
 
+        stage('Staging - Update deployment') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                withCredentials([gitUsernamePassword(credentialsId: 'GithubAccessToken', gitToolName: 'Default')]) {
+                    sh """
+                        git fetch origin develop
+                        git checkout -B develop origin/develop
+                        sed -i 's|image: .*|image: ${DOCKER_USER}/staging-${APP_NAME}:${TAG}|' k8s/staging/jellyhub-deployment.yaml
+                        git add k8s/staging/jellyhub-deployment.yaml
+                        git diff --cached --quiet || git -c user.name=Jenkins -c user.email=jenkins@noreply-jenkins.com commit -m 'ci: deploy staging ${TAG} [skip ci]'
+                        git push origin develop
+                    """
+                }
+            }
+        }
+
         /**************/
         /* Production */
         /**************/
         stage('Production - Build Image') {
             when {
-                branch 'production'
+                branch 'main'
             }
             steps {
                 sh """
@@ -131,7 +142,7 @@ pipeline {
         }
         stage('Production - Analyze Image') {
             when {
-                branch 'production'
+                branch 'main'
             }
             steps {
                 sh """
@@ -147,17 +158,31 @@ pipeline {
         }
         stage('Production - Push Docker image to DockerHub') {
             when {
-                branch 'production'
-            }
-            environment {
-                registryCredential = 'DOCKER_HUB_CREDENTIALS'
+                branch 'main'
             }
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CREDENTIALS') {
                         docker.image("${DOCKER_USER}/production-${APP_NAME}:${TAG}").push()
                         docker.image("${DOCKER_USER}/production-${APP_NAME}:latest").push()
                     }
+                }
+            }
+        }
+        stage('Production - Update deployment') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([gitUsernamePassword(credentialsId: 'GithubAccessToken', gitToolName: 'Default')]) {
+                    sh """
+                        git fetch origin main
+                        git checkout -B main origin/main
+                        sed -i 's|image: .*|image: ${DOCKER_USER}/production-${APP_NAME}:${TAG}|' k8s/prod/jellyhub-deployment.yaml
+                        git add k8s/prod/jellyhub-deployment.yaml
+                        git diff --cached --quiet || git -c user.name=Jenkins -c user.email=jenkins@noreply-jenkins.com commit -m 'ci: deploy production ${TAG} [skip ci]'
+                        git push origin main
+                    """
                 }
             }
         }
@@ -170,8 +195,8 @@ pipeline {
             echo 'Pipeline failed'
         }
         cleanup {
-            echo 'Clean Docker images'
-            sh 'docker image prune -a -f'
+            echo 'Cleaning up Docker images'
+            sh 'docker rmi $(docker images -q --filter 'reference = daicyr*')'
         }
     }
 }
