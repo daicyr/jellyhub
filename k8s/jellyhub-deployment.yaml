@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: jellyhub
-          image: zigleur/jellyhub:latest
+          image: daicyr/staging-jellyhub-app:latest
           envFrom:
             - secretRef:
                 name: jellyhub-secrets
