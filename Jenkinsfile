@@ -99,30 +99,27 @@ pipeline {
                     }
                     steps {
                         script {
-                            docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                            docker.withRegistry('https://registry.hub.docker.com',  'DOCKER_HUB_CREDENTIALS') {
                                 docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
                                 docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
                             }
                         }
                     }
                 }
-            }
-        }
 
-        stage('Staging - Update deployment') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                withCredentials([gitUsernamePassword(credentialsId: 'GithubAccessToken', gitToolName: 'Default')]) {
-                    sh """
-                        git fetch origin develop
-                        git checkout -B develop origin/develop
-                        sed -i 's|image: .*|image: ${DOCKER_USER}/staging-${APP_NAME}:${TAG}|' k8s/staging/jellyhub-deployment.yaml
-                        git add k8s/staging/jellyhub-deployment.yaml
-                        git diff --cached --quiet || git -c user.name=Jenkins -c user.email=jenkins@noreply-jenkins.com commit -m 'ci: deploy staging ${TAG} [skip ci]'
-                        git push origin develop
-                    """
+                stage('Staging - Update deployment') {
+                    steps {
+                        withCredentials([gitUsernamePassword(credentialsId: 'GithubAccessToken', gitToolName: 'Default')]) {
+                            sh """
+                                git fetch origin develop
+                                git checkout -B develop origin/develop
+                                sed -i 's|image: .*|image: ${DOCKER_USER}/staging-${APP_NAME}:${TAG}|' k8s/staging/jellyhub-deployment.yaml
+                                git add k8s/staging/jellyhub-deployment.yaml
+                                git diff --cached --quiet || git -c user.name=Jenkins -c user.email=jenkins@noreply-jenkins.com commit -m 'ci: deploy staging ${TAG} [skip ci]'
+                                git push origin develop
+                            """
+                        }
+                    }
                 }
             }
         }
@@ -158,34 +155,29 @@ pipeline {
                     }
                 }
                 stage('Production - Push Docker image to DockerHub') {
-                    environment {
-                        registryCredential = 'DOCKER_HUB_CREDENTIALS'
-                    }
                     steps {
                         script {
-                            docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                            docker.withRegistry('https://registry.hub.docker.com', 'DOCKER_HUB_CREDENTIALS') {
                                 docker.image("${DOCKER_USER}/production-${APP_NAME}:${TAG}").push()
                                 docker.image("${DOCKER_USER}/production-${APP_NAME}:latest").push()
                             }
                         }
                     }
                 }
-            }
-        }
-        stage('Production - Update deployment') {
-            when {
-                branch 'main'
-            }
-            steps {
-                withCredentials([gitUsernamePassword(credentialsId: 'GithubAccessToken', gitToolName: 'Default')]) {
-                    sh """
-                        git fetch origin main
-                        git checkout -B main origin/main
-                        sed -i 's|image: .*|image: ${DOCKER_USER}/production-${APP_NAME}:${TAG}|' k8s/prod/jellyhub-deployment.yaml
-                        git add k8s/prod/jellyhub-deployment.yaml
-                        git diff --cached --quiet || git -c user.name=Jenkins -c user.email=jenkins@noreply-jenkins.com commit -m 'ci: deploy production ${TAG} [skip ci]'
-                        git push origin main
-                    """
+
+                stage('Production - Update deployment') {
+                    steps {
+                        withCredentials([gitUsernamePassword(credentialsId: 'GithubAccessToken', gitToolName: 'Default')]) {
+                            sh """
+                                git fetch origin main
+                                git checkout -B main origin/main
+                                sed -i 's|image: .*|image: ${DOCKER_USER}/production-${APP_NAME}:${TAG}|' k8s/prod/jellyhub-deployment.yaml
+                                git add k8s/prod/jellyhub-deployment.yaml
+                                git diff --cached --quiet || git -c user.name=Jenkins -c user.email=jenkins@noreply-jenkins.com commit -m 'ci: deploy production ${TAG} [skip ci]'
+                                git push origin main
+                            """
+                        }
+                    }
                 }
             }
         }
@@ -199,7 +191,7 @@ pipeline {
         }
         cleanup {
             echo 'Cleaning up Docker images'
-            sh 'docker rmi $(docker images -q --filter 'reference = daicyr*')'
+            sh 'docker rmi $(docker images -q --filter 'reference = daicyr * ')'
         }
     }
 }
