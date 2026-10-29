@@ -8,8 +8,8 @@ pipeline {
     environment {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
-        APP_NAME = "jellyhub-app"
-        DOCKER_USER = "daicyr"
+        APP_NAME = 'jellyhub-app'
+        DOCKER_USER = 'daicyr'
         TAG = "${env.BUILD_NUMBER}"
     }
 
@@ -46,6 +46,16 @@ pipeline {
         stage('Units Tests') {
             steps {
                 sh 'bun run test'
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
             }
         }
 
