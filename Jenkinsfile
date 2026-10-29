@@ -8,8 +8,8 @@ pipeline {
     environment {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
-        APP_NAME = "jellyhub-app"
-        DOCKER_USER = "daicyr"
+        APP_NAME = 'jellyhub-app'
+        DOCKER_USER = 'daicyr'
         TAG = "${env.GIT_COMMIT}"
     }
 
@@ -143,7 +143,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         docker.image("${DOCKER_USER}/production-${APP_NAME}:${TAG}").push()
                         docker.image("${DOCKER_USER}/production-${APP_NAME}:latest").push()
                     }
