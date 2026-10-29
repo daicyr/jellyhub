@@ -55,6 +55,16 @@ pipeline {
                 sh 'bun run test'
             }
         }
+        stage('SonarQube analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
 
         /***********/
         /* Staging */
