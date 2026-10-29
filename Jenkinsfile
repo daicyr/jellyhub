@@ -8,8 +8,8 @@ pipeline {
     environment {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
-        APP_NAME = "jellyhub-app"
-        DOCKER_USER = "daicyr"
+        APP_NAME = 'jellyhub-app'
+        DOCKER_USER = 'daicyr'
         TAG = "${env.BUILD_NUMBER}"
     }
 
@@ -17,15 +17,21 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                publishChecks name: 'JellyHub CI',
+                    status: 'IN_PROGRESS',
+                    conclusion: 'NONE',
+                    title: 'CI running',
+                    summary: 'CI is running.',
+                    detailsURL: env.BUILD_URL
             }
         }
 
         stage('Setup Bun') {
             steps {
-                sh """
+                sh '''
                     curl -fsSL https://bun.sh/install | bash
                     bun --version
-                """
+                '''
             }
         }
         stage('Install dependencies') {
@@ -89,7 +95,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
                         docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
                     }
@@ -135,6 +141,20 @@ pipeline {
         }
     }
     post {
+        always {
+            script {
+                def result = currentBuild.currentResult
+                def conclusion = result == 'SUCCESS' ? 'SUCCESS' :
+                    result == 'ABORTED' ? 'CANCELED' : 'FAILURE'
+
+                publishChecks name: 'JellyHub CI',
+                    status: 'COMPLETED',
+                    conclusion: conclusion,
+                    title: "CI ${result.toLowerCase()}",
+                    summary: "JellyHub CI finished with result: ${result}. See the Jenkins build for logs.",
+                    detailsURL: env.BUILD_URL
+            }
+        }
         success {
             echo 'Pipeline succeed'
         }
