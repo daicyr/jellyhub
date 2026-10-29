@@ -23,7 +23,7 @@ pipeline {
         stage('Test: List Directory') {
             steps {
                 script {
-                    String output = sh(script: 'ls -la ../..', returnStdout: true).trim()
+                    String output = sh(script: 'ls -la ../../..', returnStdout: true).trim()
                     echo "Output:\n${output}"
                 }
             }
