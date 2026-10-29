@@ -1,4 +1,4 @@
-FROM oven/bun:latest AS base
+FROM oven/bun:1.4.4 AS base
 WORKDIR /app
 
 FROM base AS deps
@@ -12,11 +12,13 @@ ENV NODE_ENV=production
 RUN bun run build
 RUN bun build src/lib/db/migrate.ts --target bun --outdir ./.output
 
-FROM base AS runner
+FROM oven/bun:1.4.4-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/drizzle/postgresql ./drizzle/postgresql
 
 USER bun
 EXPOSE 3000/tcp
 
-ENTRYPOINT [ "sh", "-c", "bun .output/migrate.js && bun --bun .output/server/index.mjs" ]
+ENTRYPOINT [ "sh", "-c", "bun .output/migrate.js && exec bun --bun .output/server/index.mjs" ]
