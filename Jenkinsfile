@@ -40,6 +40,10 @@ pipeline {
                 sh 'bun install --frozen-lockfile'
             }
         }
+
+        /*************************/
+        /* Tests and Validations */
+        /*************************/
         stage('Lint') {
             steps {
                 sh 'bun run lint'
