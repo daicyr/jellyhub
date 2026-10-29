@@ -85,15 +85,15 @@ pipeline {
             when {
                 branch 'staging'
             }
-            echo 'build docker image'
-            // steps {
-            //     sh """
-            //         docker compose build
-            //         docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
-            //         docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
-            //         docker image rm ${APP_NAME}:latest
-            //     """
-            // }
+            steps {
+                echo 'build docker image'
+                // sh """
+                //     docker compose build
+                //     docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
+                //     docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
+                //     docker image rm ${APP_NAME}:latest
+                // """
+            }
         }
         // stage('Staging - Build Image') {
         //     when {
