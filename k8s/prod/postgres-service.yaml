@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgresdb
-  namespace: default
   labels:
     app: postgresdb
+  name: postgresdb
+  namespace: jellyhub-prod
 spec:
-  type: NodePort
   ports:
     - port: 5432
   selector:
     app: postgresdb
+  type: ClusterIP

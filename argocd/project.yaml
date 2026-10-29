@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: jellyhub
+  namespace: argocd
+spec:
+  sourceRepos:
+    - https://github.com/daicyr/jellyhub.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: jellyhub-staging
+    - server: https://kubernetes.default.svc
+      namespace: jellyhub-prod
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+    - group: ""
+      kind: PersistentVolume
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: PersistentVolumeClaim
+    - group: apps
+      kind: Deployment

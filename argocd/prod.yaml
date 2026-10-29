@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyhub-prod
+  namespace: argocd
+spec:
+  project: jellyhub
+  source:
+    repoURL: https://github.com/daicyr/jellyhub.git
+    targetRevision: main
+    path: k8s/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jellyhub-prod
+  # Synchronisation manuelle après validation en staging.
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
