@@ -142,7 +142,7 @@ pipeline {
             echo 'Pipeline failed'
         }
         cleanup {
-            sh 'docker image prune -f'
+            sh 'docker image prune -a -f'
         }
     }
 }
