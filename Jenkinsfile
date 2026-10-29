@@ -94,9 +94,6 @@ pipeline {
                     }
                 }
                 stage('Staging - Push Docker image to DockerHub') {
-                    environment {
-                        registryCredential = 'DOCKER_HUB_CREDENTIALS'
-                    }
                     steps {
                         script {
                             docker.withRegistry('https://registry.hub.docker.com',  'DOCKER_HUB_CREDENTIALS') {
@@ -192,7 +189,11 @@ pipeline {
         cleanup {
             echo 'Cleaning up Docker images'
             sh '''
-                docker rmi $(docker images -q --filter 'reference=daicyr*')
+                docker image rm \
+                    "daicyr/staging-jellyhub-app:${TAG}" \
+                    daicyr/staging-jellyhub-app:latest \
+                    "daicyr/production-jellyhub-app:${TAG}" \
+                    daicyr/production-jellyhub-app:latest || true
             '''
         }
     }
