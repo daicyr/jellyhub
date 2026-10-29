@@ -10,144 +10,147 @@ pipeline {
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
         APP_NAME = "jellyhub-app"
         DOCKER_USER = "daicyr"
-        TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Configure env variables') {
             steps {
-                checkout scm
                 script {
-                    env.GIT_COMMIT_SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    env.TAG = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                 }
-                echo "${GIT_COMMIT_SHA}"
             }
         }
 
-        // stage('Setup Bun') {
-        //     steps {
-        //         sh '''
-        //             curl -fsSL https://bun.sh/install | bash
-        //             bun --version
-        //         '''
-        //     }
-        // }
-        // stage('Install dependencies') {
-        //     steps {
-        //         sh 'bun install --frozen-lockfile'
-        //     }
-        // }
-        // stage('Lint') {
-        //     steps {
-        //         sh 'bun run lint'
-        //     }
-        // }
-        // stage('Fmt') {
-        //     steps {
-        //         sh 'bun run fmt:check'
-        //     }
-        // }
-        // stage('Units Tests') {
-        //     steps {
-        //         sh 'bun run test'
-        //     }
-        // }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-        // /***********/
-        // /* Staging */
-        // /***********/
-        // stage('Staging - Build Docker image') {
-        //     when {
-        //         branch 'staging'
-        //     }
-        //     steps {
-        //         sh """
-        //             docker build -t staging-${APP_NAME} .
-        //             docker tag staging-${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
-        //             docker tag staging-${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:latest
-        //         """
-        //     }
-        // }
-        // stage('Staging - Analyze Image') {
-        //     when {
-        //         branch 'staging'
-        //     }
-        //     steps {
-        //         sh """
-        //             docker run --rm \
-        //                 -v /var/run/docker.sock:/var/run/docker.sock \
-        //                 -v trivy-cache:/root/.cache/ \
-        //                 aquasec/trivy:latest image \
-        //                     --severity HIGH,CRITICAL \
-        //                     --exit-code 1 \
-        //                     staging-${APP_NAME}
-        //         """
-        //     }
-        // }
-        // stage('Staging - Push Docker image to DockerHub') {
-        //     when {
-        //         branch 'staging'
-        //     }
-        //     environment {
-        //         registryCredential = 'DOCKER_HUB_CREDENTIALS'
-        //     }
-        //     steps {
-        //         script {
-        //             docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-        //                 docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
-        //                 docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Setup Bun') {
+            steps {
+                sh '''
+                    curl -fsSL https://bun.sh/install | bash
+                    bun --version
+                '''
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                sh 'bun install --frozen-lockfile'
+            }
+        }
+        stage('Lint') {
+            steps {
+                sh 'bun run lint'
+            }
+        }
+        stage('Fmt') {
+            steps {
+                sh 'bun run fmt:check'
+            }
+        }
+        stage('Units Tests') {
+            steps {
+                sh 'bun run test'
+            }
+        }
 
-        // /**************/
-        // /* Production */
-        // /**************/
-        // stage('Production - Build Image') {
-        //     when {
-        //         branch 'production'
-        //     }
-        //     steps {
-        //         sh """
-        //             docker build -t production-${APP_NAME} .
-        //             docker tag production-${APP_NAME} ${DOCKER_USER}/production-${APP_NAME}:${TAG}
-        //             docker tag production-${APP_NAME} ${DOCKER_USER}/production-${APP_NAME}:latest
-        //         """
-        //     }
-        // }
-        // stage('Production - Analyze Image') {
-        //     when {
-        //         branch 'production'
-        //     }
-        //     steps {
-        //         sh """
-        //             docker run --rm \
-        //                 -v /var/run/docker.sock:/var/run/docker.sock \
-        //                 -v trivy-cache:/root/.cache/ \
-        //                 aquasec/trivy:latest image \
-        //                     --severity HIGH,CRITICAL \
-        //                     --exit-code 1 \
-        //                     production-${APP_NAME}
-        //         """
-        //     }
-        // }
-        // stage('Production - Push Docker image to DockerHub') {
-        //     when {
-        //         branch 'production'
-        //     }
-        //     environment {
-        //         registryCredential = 'DOCKER_HUB_CREDENTIALS'
-        //     }
-        //     steps {
-        //         script {
-        //             docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-        //                 docker.image("${DOCKER_USER}/production-${APP_NAME}:${TAG}").push()
-        //                 docker.image("${DOCKER_USER}/production-${APP_NAME}:latest").push()
-        //             }
-        //         }
-        //     }
-        // }
+        /***********/
+        /* Staging */
+        /***********/
+        stage('Staging - Build Docker image') {
+            when {
+                branch 'staging'
+            }
+            steps {
+                sh """
+                    docker build -t staging-${APP_NAME} .
+                    docker tag staging-${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                    docker tag staging-${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:latest
+                """
+            }
+        }
+        stage('Staging - Analyze Image') {
+            when {
+                branch 'staging'
+            }
+            steps {
+                sh """
+                    docker run --rm \
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v trivy-cache:/root/.cache/ \
+                        aquasec/trivy:latest image \
+                            --severity HIGH,CRITICAL \
+                            --exit-code 1 \
+                            staging-${APP_NAME}
+                """
+            }
+        }
+        stage('Staging - Push Docker image to DockerHub') {
+            when {
+                branch 'staging'
+            }
+            environment {
+                registryCredential = 'DOCKER_HUB_CREDENTIALS'
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
+                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
+                    }
+                }
+            }
+        }
+
+        /**************/
+        /* Production */
+        /**************/
+        stage('Production - Build Image') {
+            when {
+                branch 'production'
+            }
+            steps {
+                sh """
+                    docker build -t production-${APP_NAME} .
+                    docker tag production-${APP_NAME} ${DOCKER_USER}/production-${APP_NAME}:${TAG}
+                    docker tag production-${APP_NAME} ${DOCKER_USER}/production-${APP_NAME}:latest
+                """
+            }
+        }
+        stage('Production - Analyze Image') {
+            when {
+                branch 'production'
+            }
+            steps {
+                sh """
+                    docker run --rm \
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v trivy-cache:/root/.cache/ \
+                        aquasec/trivy:latest image \
+                            --severity HIGH,CRITICAL \
+                            --exit-code 1 \
+                            production-${APP_NAME}
+                """
+            }
+        }
+        stage('Production - Push Docker image to DockerHub') {
+            when {
+                branch 'production'
+            }
+            environment {
+                registryCredential = 'DOCKER_HUB_CREDENTIALS'
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                        docker.image("${DOCKER_USER}/production-${APP_NAME}:${TAG}").push()
+                        docker.image("${DOCKER_USER}/production-${APP_NAME}:latest").push()
+                    }
+                }
+            }
+        }
     }
     post {
         success {
