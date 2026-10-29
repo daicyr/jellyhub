@@ -20,24 +20,10 @@ pipeline {
             }
         }
 
-        stage('Test: List Directory') {
-            steps {
-                script {
-                    String output = sh(script: 'ls -la /usr/local/bin/', returnStdout: true).trim()
-                    echo "Output:\n${output}"
-                }
-            }
-        }
-
         stage('Setup Bun') {
             steps {
                 sh """
-                    if command -v bun &> /dev/null; then
-                        echo 'Bun already installed. Skipping installation.'
-                    else
-                        echo 'Installing Bun...'
-                        curl -fsSL https://bun.sh/install | bash -s 'bun-v1.1.34'
-                    fi
+                    curl -fsSL https://bun.sh/install | bash
                     bun --version
                 """
             }
