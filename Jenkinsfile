@@ -191,7 +191,9 @@ pipeline {
         }
         cleanup {
             echo 'Cleaning up Docker images'
-            sh 'docker rmi $(docker images -q --filter 'reference = daicyr * ')'
+            sh """
+                docker rmi $(docker images -q --filter 'reference=daicyr*')
+            """
         }
     }
 }
