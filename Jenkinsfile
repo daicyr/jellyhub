@@ -10,7 +10,7 @@ pipeline {
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
         APP_NAME = "jellyhub-app"
         DOCKER_USER = "daicyr"
-        TAG = "${env.GIT_COMMIT}"
+        TAG = "${env.MERGE_COMMIT_SHA}"
     }
 
     stages {
