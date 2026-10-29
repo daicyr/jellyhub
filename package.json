@@ -10,7 +10,7 @@
     "lint": "bun --bun eslint",
     "fmt:check": "bun prettier --check 'src/**/*.{js,ts,jsx,tsx,css}'",
     "fmt:write": "bun prettier --check 'src/**/*.{js,ts,jsx,tsx,css}' --write",
-    "test": "bun test",
+    "test": "bun --bun test",
     "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
     "test:e2e:install": "PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium --only-shell",
     "db:generate": "bun --bun drizzle-kit generate",
