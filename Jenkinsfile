@@ -58,9 +58,9 @@ pipeline {
             }
             steps {
                 sh """
-                    docker compose build
-                    docker tag app-pipeline_staging-app ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
-                    docker tag app-pipeline_staging-app ${DOCKER_USER}/staging-${APP_NAME}:latest
+                    docker build -t --name staging-${APP_NAME} .
+                    docker tag staging-${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                    docker tag staging-${APP_NAME}-app ${DOCKER_USER}/staging-${APP_NAME}:latest
                 """
             }
         }
@@ -69,7 +69,15 @@ pipeline {
                 branch 'staging'
             }
             steps {
-                sh 'trivy image --severity HIGH,CRITICAL --no-progress --exit-code 1 app-pipeline_staging-app'
+                sh """
+                    docker run --rm \
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v trivy-cache:/root/.cache/ \
+                        aquasec/trivy:latest staging-${APP_NAME} \
+                            --severity HIGH,CRITICAL \
+                            --exit-code 1 \
+                            staging-${APP_NAME}
+                """
             }
         }
         stage('Staging - Push Docker image to DockerHub') {
@@ -92,7 +100,7 @@ pipeline {
         stage('Staging - Clean local Docker image') {
             steps {
                 sh """
-                    docker image rm app-pipeline_staging-app
+                    docker image rm staging-${APP_NAME}
                     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
                     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
                 """
