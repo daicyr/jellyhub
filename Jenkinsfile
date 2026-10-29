@@ -62,7 +62,6 @@ pipeline {
                     docker compose build
                     docker tag app-pipeline_staging-app ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
                     docker tag app-pipeline_staging-app ${DOCKER_USER}/staging-${APP_NAME}:latest
-                    docker image rm app-pipeline_staging-app
                 """
             }
         }
@@ -91,6 +90,7 @@ pipeline {
                     }
                 }
                 sh """
+                    docker image rm app-pipeline_staging-app
                     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
                     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
                 """
