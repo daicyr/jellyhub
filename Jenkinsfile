@@ -29,21 +29,6 @@ pipeline {
             }
         }
 
-        stage('Setup NodeJs') {
-            steps {
-                sh 'echo "Node is located at: $(which node)"'
-                sh """
-                    if command -v node &> /dev/null; then
-                        echo 'NodeJs already installed. Skipping installation.'
-                    else
-                        echo 'Installing NodeJs...'
-                        curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s 26
-                    fi
-                    node -v
-                """
-            }
-        }
-
         stage('Setup Bun') {
             steps {
                 sh """
