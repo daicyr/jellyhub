@@ -57,13 +57,13 @@ pipeline {
                 branch 'staging'
             }
             steps {
-                echo 'build docker image'
-                // sh """
-                //     docker compose build
-                //     docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
-                //     docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
-                //     docker image rm ${APP_NAME}:latest
-                // """
+                echo 'Build Docker image'
+                sh """
+                    docker compose build
+                    docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
+                    docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
+                    docker image rm ${APP_NAME}:latest
+                """
             }
         }
         // stage('Staging - Build Image') {
@@ -100,16 +100,16 @@ pipeline {
             }
             steps {
                 echo 'push image to github container registry'
-                // script {
-                //     docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
-                //         docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
-                //         docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
-                //     }
-                // }
-                // sh """
-                //     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
-                //     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
-                // """
+                script {
+                    docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
+                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
+                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
+                    }
+                }
+                sh """
+                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
+                """
             }
         }
 
