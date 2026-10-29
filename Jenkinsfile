@@ -20,11 +20,11 @@ pipeline {
             }
         }
 
-        stage('Test List Directory') {
+        stage('Test: List Directory') {
             steps {
                 script {
-                    String dirContents = sh(script: 'ls -la ${WORKSPACE}', returnStdout: true).trim()
-                    echo "Directory contents:\n${dirContents}"
+                    String output = sh(script: 'which node', returnStdout: true).trim()
+                    echo "Output:\n${output}"
                 }
             }
         }
@@ -85,18 +85,32 @@ pipeline {
             when {
                 branch 'staging'
             }
-            steps {
-                withCredentials([file(credentialsId: 'jellyhub_STAGING_ENV', variable: 'ENV_FILE')]) {
-                    sh '''
-                        cp $ENV_FILE ${WORKSPACE}/.env
-                        docker compose build
-                        docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
-                        docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
-                        docker image rm ${APP_NAME}:latest
-                    '''
-                }
-            }
+            echo 'build docker image'
+            // steps {
+            //     sh """
+            //         docker compose build
+            //         docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
+            //         docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
+            //         docker image rm ${APP_NAME}:latest
+            //     """
+            // }
         }
+        // stage('Staging - Build Image') {
+        //     when {
+        //         branch 'staging'
+        //     }
+        //     steps {
+        //         withCredentials([file(credentialsId: 'jellyhub_STAGING_ENV', variable: 'ENV_FILE')]) {
+        //             sh '''
+        //                 cp $ENV_FILE ${WORKSPACE}/.env
+        //                 docker compose build
+        //                 docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
+        //                 docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
+        //                 docker image rm ${APP_NAME}:latest
+        //             '''
+        //         }
+        //     }
+        // }
         stage('Staging - Analyze Image') {
             when {
                 branch 'staging'
@@ -115,16 +129,16 @@ pipeline {
             }
             steps {
                 echo 'push image to github container registry'
-                script {
-                    docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
-                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
-                        docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
-                    }
-                }
-                sh """
-                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
-                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
-                """
+                // script {
+                //     docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
+                //         docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
+                //         docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
+                //     }
+                // }
+                // sh """
+                //     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                //     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
+                // """
             }
         }
 
