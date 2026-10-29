@@ -141,7 +141,7 @@ pipeline {
         failure {
             echo 'Pipeline failed'
         }
-        finally {
+        cleanup {
             echo 'Cleaning Docker image'
             sh """
                 docker image rm staging-${APP_NAME}
