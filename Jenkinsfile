@@ -60,9 +60,9 @@ pipeline {
                 echo 'Build Docker image'
                 sh """
                     docker compose build
-                    docker tag ${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
-                    docker tag ${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:latest
-                    docker image rm ${APP_NAME}
+                    docker tag app-pipeline_staging-app ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                    docker tag app-pipeline_staging-app ${DOCKER_USER}/staging-${APP_NAME}:latest
+                    docker image rm app-pipeline_staging-app
                 """
             }
         }
