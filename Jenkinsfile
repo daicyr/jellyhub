@@ -16,7 +16,7 @@ pipeline {
         stage('Configure env variables') {
             steps {
                 script {
-                    env.TAG = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    env.TAG = "${env.GIT_COMMIT.take(8)}"
                 }
             }
         }
