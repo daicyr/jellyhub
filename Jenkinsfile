@@ -68,8 +68,9 @@ pipeline {
         /***********/
         stage('Staging') {
             when {
-                branch 'develop'
+                branch 'Staging'
             }
+
             stages {
                 stage('Staging - Build Docker image') {
                     steps {
@@ -126,7 +127,7 @@ pipeline {
         /**************/
         stage('Production') {
             when {
-                branch 'main'
+                branch 'Production'
             }
             stages {
                 stage('Production - Build Image') {
