@@ -78,7 +78,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'jellyhub_STAGING_ENV', variable: 'ENV_FILE')]) {
                     sh '''
-                        cp $ENV_FILE .env
+                        cp $ENV_FILE ${WORKSPACE}/.env
                         docker compose build
                         docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
                         docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
