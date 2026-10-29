@@ -20,6 +20,15 @@ pipeline {
             }
         }
 
+        stage('Test List Directory') {
+            steps {
+                script {
+                    String dirContents = sh(script: 'ls -la ${WORKSPACE}', returnStdout: true).trim()
+                    echo "Directory contents:\n${dirContents}"
+                }
+            }
+        }
+
         stage('Setup NodeJs') {
             steps {
                 sh 'echo "Node is located at: $(which node)"'
@@ -30,6 +39,7 @@ pipeline {
                         echo 'Installing NodeJs...'
                         curl -fsSL https://raw.githubusercontent.com/mklement0/n-install/stable/bin/n-install | bash -s 26
                     fi
+                    node -v
                 """
             }
         }
