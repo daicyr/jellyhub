@@ -52,12 +52,11 @@ pipeline {
         /***********/
         /* Staging */
         /***********/
-        stage('Staging - Build Image') {
+        stage('Staging - Build Docker image') {
             when {
                 branch 'staging'
             }
             steps {
-                echo 'Build Docker image'
                 sh """
                     docker compose build
                     docker tag app-pipeline_staging-app ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
@@ -70,11 +69,10 @@ pipeline {
                 branch 'staging'
             }
             steps {
-                // analyze docker image with trivy scan
-                echo 'analyze docker image with trivy scan'
+                bat "trivy image --severity HIGH,CRITICAL --no-progress --exit-code 1 app-pipeline_staging-app"
             }
         }
-        stage('Staging - Push image to ghcr.io') {
+        stage('Staging - Push Docker image to DockerHub') {
             when {
                 branch 'staging'
             }
@@ -82,13 +80,17 @@ pipeline {
                 registryCredential = 'DOCKER_HUB_CREDENTIALS'
             }
             steps {
-                echo 'push image to github container registry'
                 script {
                     docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
                         docker.image("${DOCKER_USER}/staging-${APP_NAME}:${TAG}").push()
                         docker.image("${DOCKER_USER}/staging-${APP_NAME}:latest").push()
                     }
                 }
+            }
+        }
+
+        stage('Staging - Clean local Docker image') {
+            steps {
                 sh """
                     docker image rm app-pipeline_staging-app
                     docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
@@ -125,6 +127,12 @@ pipeline {
             steps {
                 // push image to github container registry
                 echo 'push image to github container registry'
+            }
+        }
+        stage('Production - Clean local Docker image') {
+            steps {
+                // push image to github container registry
+                echo 'Clean local Docker image'
             }
         }
     }
