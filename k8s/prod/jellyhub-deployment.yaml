@@ -27,7 +27,7 @@ spec:
           envFrom:
             - secretRef:
                 name: jellyhub-secrets
-          image: daicyr/production-jellyhub-app:841c8458
+          image: daicyr/production-jellyhub-app:c82b3207
           name: jellyhub
           ports:
             - containerPort: 3000
