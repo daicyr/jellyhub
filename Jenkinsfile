@@ -10,10 +10,17 @@ pipeline {
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
         APP_NAME = "jellyhub-app"
         DOCKER_USER = "daicyr"
-        TAG = "${env.MERGE_COMMIT_SHA}"
+        TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
+        stage('Configure') {
+            steps {
+                script {
+                    env.TAG = env.GIT_COMMIT ? env.GIT_COMMIT.take(7) : env.BUILD_NUMBER
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 checkout scm
