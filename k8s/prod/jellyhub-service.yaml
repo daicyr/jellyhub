@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyhub
+  namespace: jellyhub-prod
+spec:
+  ports:
+    - nodePort: 30086
+      port: 80
+      targetPort: 3000
+  selector:
+    app: jellyhub
+  type: NodePort

@@ -1,17 +1,17 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { SearchX, ServerOff } from "lucide-react";
+import { Suspense, useState } from "react";
+import type { getJellyData } from "@/functions/server.functions";
+import type { ServersItems } from "@/functions/jellyfin.functions";
 import ItemCard, { ItemCardLoading } from "@/components/item/item-card";
 import SearchBar from "@/components/search-bar";
 import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/components/ui/link";
 import Skeleton from "@/components/ui/skeleton";
-import { type ServersItems } from "@/functions/jellyfin.functions";
 import { itemsQueryOptions } from "@/queries/servers";
 import { jellyDataQueryOptions } from "@/queries/jellydata";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { SearchX, ServerOff } from "lucide-react";
-import { Suspense, useState } from "react";
-import type { getJellyData } from "@/functions/server.functions";
 
 const routesWithType = [
   { param: "movies", type: "Movie", name: "Movies" },

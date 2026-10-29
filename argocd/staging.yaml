@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyhub-staging
+  namespace: argocd
+spec:
+  project: jellyhub
+  source:
+    repoURL: https://github.com/daicyr/jellyhub.git
+    targetRevision: develop
+    path: k8s/staging
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jellyhub-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

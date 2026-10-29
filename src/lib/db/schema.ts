@@ -1,46 +1,54 @@
 import { defineRelations } from "drizzle-orm";
 import {
+  boolean,
   index,
-  integer,
-  sqliteTable,
+  pgTable,
   text,
+  timestamp,
   unique,
   uniqueIndex,
-} from "drizzle-orm/sqlite-core";
+} from "drizzle-orm/pg-core";
 import { encryptedText } from "./types";
 
-export const user = sqliteTable("user", {
+export const user = pgTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => Bun.randomUUIDv7()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  emailVerified: integer("email_verified", { mode: "boolean" })
-    .default(false)
-    .notNull(),
+  emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    precision: 3,
+  }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true, precision: 3 })
     .$onUpdate(() => new Date())
     .notNull(),
   role: text("role"),
-  banned: integer("banned", { mode: "boolean" }).default(false),
+  banned: boolean("banned").default(false),
   banReason: text("ban_reason"),
-  banExpires: integer("ban_expires", { mode: "timestamp_ms" }),
+  banExpires: timestamp("ban_expires", { withTimezone: true, precision: 3 }),
   username: text("username").unique(),
   displayUsername: text("display_username"),
 });
 
-export const session = sqliteTable(
+export const session = pgTable(
   "session",
   {
     id: text("id")
       .primaryKey()
       .$defaultFn(() => Bun.randomUUIDv7()),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+    expiresAt: timestamp("expires_at", {
+      withTimezone: true,
+      precision: 3,
+    }).notNull(),
     token: text("token").notNull().unique(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+      precision: 3,
+    }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, precision: 3 })
       .$onUpdate(() => new Date())
       .notNull(),
     ipAddress: text("ip_address"),
@@ -53,13 +61,14 @@ export const session = sqliteTable(
   (table) => [index("session_userId_idx").on(table.userId)],
 );
 
-export const account = sqliteTable(
+export const account = pgTable(
   "account",
   {
     id: text("id")
       .primaryKey()
       .$defaultFn(() => Bun.randomUUIDv7()),
-    issuer: text("issuer").notNull(),
+    // Preserve values from Better Auth 1.7.0–1.7.2; newer versions omit issuer.
+    issuer: text("issuer"),
     accountId: text("account_id").notNull(),
     providerId: text("provider_id").notNull(),
     userId: text("user_id")
@@ -68,29 +77,34 @@ export const account = sqliteTable(
     accessToken: text("access_token"),
     refreshToken: text("refresh_token"),
     idToken: text("id_token"),
-    accessTokenExpiresAt: integer("access_token_expires_at", {
-      mode: "timestamp_ms",
+    accessTokenExpiresAt: timestamp("access_token_expires_at", {
+      withTimezone: true,
+      precision: 3,
     }),
-    refreshTokenExpiresAt: integer("refresh_token_expires_at", {
-      mode: "timestamp_ms",
+    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", {
+      withTimezone: true,
+      precision: 3,
     }),
     scope: text("scope"),
     password: text("password"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+      precision: 3,
+    }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, precision: 3 })
       .$onUpdate(() => new Date())
       .notNull(),
   },
   (table) => [
-    uniqueIndex("account_issuer_accountId_uidx").on(
-      table.issuer,
+    uniqueIndex("account_providerId_accountId_uidx").on(
+      table.providerId,
       table.accountId,
     ),
     index("account_userId_idx").on(table.userId),
   ],
 );
 
-export const verification = sqliteTable(
+export const verification = pgTable(
   "verification",
   {
     id: text("id")
@@ -98,16 +112,22 @@ export const verification = sqliteTable(
       .$defaultFn(() => Bun.randomUUIDv7()),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
-    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    expiresAt: timestamp("expires_at", {
+      withTimezone: true,
+      precision: 3,
+    }).notNull(),
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+      precision: 3,
+    }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, precision: 3 })
       .$onUpdate(() => new Date())
       .notNull(),
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
-export const ssoProvider = sqliteTable(
+export const ssoProvider = pgTable(
   "sso_provider",
   {
     id: text("id")
@@ -120,20 +140,19 @@ export const ssoProvider = sqliteTable(
     providerId: text("provider_id").notNull().unique(),
     organizationId: text("organization_id"),
     domain: text("domain").notNull(),
-    domainVerified: integer("domain_verified", { mode: "boolean" })
-      .default(false)
-      .notNull(),
-    createdAt: integer("created_at", { mode: "timestamp_ms" }).$default(
-      () => new Date(),
-    ),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    domainVerified: boolean("domain_verified").default(false).notNull(),
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+      precision: 3,
+    }).$default(() => new Date()),
+    updatedAt: timestamp("updated_at", { withTimezone: true, precision: 3 })
       .$onUpdate(() => new Date())
       .notNull(),
   },
   (table) => [index("sso_provider_userId_idx").on(table.userId)],
 );
 
-export const jellydata = sqliteTable(
+export const jellydata = pgTable(
   "jellydata",
   {
     id: text("id")
@@ -146,10 +165,11 @@ export const jellydata = sqliteTable(
     serverName: text("server_name").notNull(),
     serverUsername: text("server_username").notNull(),
     serverToken: encryptedText("server_token"),
-    createdAt: integer("created_at", { mode: "timestamp_ms" }).$default(
-      () => new Date(),
-    ),
-    updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+      precision: 3,
+    }).$default(() => new Date()),
+    updatedAt: timestamp("updated_at", { withTimezone: true, precision: 3 })
       .$onUpdate(() => new Date())
       .notNull(),
   },

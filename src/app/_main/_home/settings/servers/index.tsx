@@ -1,12 +1,12 @@
-import AddServerDialog from "@/components/server/add-server-dialog";
-import ServerCard, {
-  ServerCardSkeleton,
-} from "@/components/server/server-card";
-import { jellyDataUpdatedQueryOptions } from "@/queries/jellydata";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { HardDrive } from "lucide-react";
 import { Suspense } from "react";
+import { jellyDataUpdatedQueryOptions } from "@/queries/jellydata";
+import ServerCard, {
+  ServerCardSkeleton,
+} from "@/components/server/server-card";
+import AddServerDialog from "@/components/server/add-server-dialog";
 
 export const Route = createFileRoute("/_main/_home/settings/servers/")({
   loader: ({ context: { queryClient } }) => {

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresdb
+  namespace: jellyhub-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgresdb
+    spec:
+      containers:
+        - envFrom:
+            - secretRef:
+                name: db-secrets
+          image: postgres:18
+          name: postgresdb
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql
+              name: db-data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-persistent-volume-claim

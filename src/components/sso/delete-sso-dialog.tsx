@@ -13,7 +13,7 @@ import Badge from "../ui/badge";
 import LoaderIcon from "../ui/loader-icon";
 import { Alert } from "../ui/alert";
 import type { Dialog as BaseDialog } from "@base-ui/react";
-import { ssoProvidersList } from "@/functions/sso.functions";
+import type { ssoProvidersList } from "@/functions/sso.functions";
 import { authClient } from "@/lib/auth-client";
 
 interface DeleteSsoDialogProps extends BaseDialog.Root.Props {

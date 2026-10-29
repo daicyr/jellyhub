@@ -1,7 +1,8 @@
-import { useRef, type ChangeEvent, type InputHTMLAttributes } from "react";
+import { useRef } from "react";
+import { Trash } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImg } from "../ui/avatar";
 import Button from "../ui/button";
-import { Trash } from "lucide-react";
+import type { ChangeEvent, InputHTMLAttributes } from "react";
 
 interface AvatarEditorProps extends InputHTMLAttributes<HTMLInputElement> {
   image: string | null;

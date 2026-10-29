@@ -1,11 +1,14 @@
-import { drizzle } from "drizzle-orm/bun-sqlite";
+import { drizzle } from "drizzle-orm/bun-sql";
 import { relations } from "./schema";
-import { dbFile } from "../../../drizzle.config";
 
-const db = drizzle(dbFile, {
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL must be set to a PostgreSQL connection URL");
+}
+
+const db = drizzle(databaseUrl, {
   relations,
 });
-
-db.$client.run("PRAGMA foreign_keys = ON");
 
 export default db;

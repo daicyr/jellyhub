@@ -2,7 +2,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import type { Dialog as BaseDialog } from "@base-ui/react";
 import {
   Dialog,
   DialogClose,
@@ -24,9 +23,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { editUserSchema, type editUserSchemaType } from "@/schemas/auth.schema";
-import { authClient } from "@/lib/auth-client";
 import AvatarEditor from "./avatar-editor";
+import type { Dialog as BaseDialog } from "@base-ui/react";
+import type { editUserSchemaType } from "@/schemas/auth.schema";
+import { editUserSchema } from "@/schemas/auth.schema";
+import { authClient } from "@/lib/auth-client";
 
 interface UserEditDialogProps extends BaseDialog.Root.Props {
   user: typeof authClient.$Infer.Session.user;

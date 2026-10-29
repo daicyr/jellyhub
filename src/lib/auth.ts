@@ -3,17 +3,17 @@ import { admin, username } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { sso } from "@better-auth/sso";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
-import db from "./db";
-import * as schema from "./db/schema";
 import { createAuthMiddleware } from "better-auth/api";
 import { eq } from "drizzle-orm";
+import db from "./db";
+import * as schema from "./db/schema";
 
 const baseUrl = process.env.APP_URL || "http://localhost:3000";
 
 export const auth = betterAuth({
   appName: "Jellyhub",
   secret: process.env.AUTH_SECRET as string,
-  baseUrl,
+  baseURL: baseUrl,
   trustedOrigins: async (request) => {
     if (!request) {
       return [baseUrl];
@@ -44,6 +44,7 @@ export const auth = betterAuth({
     secure: true,
   },
   hooks: {
+    // eslint-disable-next-line @typescript-eslint/require-await
     before: createAuthMiddleware(async (ctx) => {
       if (ctx.path !== "/update-user") {
         return;
@@ -68,7 +69,7 @@ export const auth = betterAuth({
     },
   },
   database: drizzleAdapter(db, {
-    provider: "sqlite",
+    provider: "pg",
     schema,
   }),
   user: {

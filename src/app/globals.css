@@ -11,7 +11,7 @@
   --color-primary: oklch(0.922 0 0);
   --color-secondary: oklch(0.269 0 0);
   --color-secondary-foreground: oklch(0.985 0 0);
-  
+
   --color-accent: oklch(0.2179 0.032 262.46);
   --color-accent-foreground: oklch(0.2938 0.032 262.46);
   --color-muted: oklch(0.3482 0.0242 265.62);
@@ -20,19 +20,19 @@
   --color-ring: oklch(0.556 0 0);
   --color-destructive: oklch(0.5579 0.1401 25.21);
   --color-success: oklch(0.6409 0.1777 142.69);
-  
+
   --radius: 0.25rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  
+
   --font-sans: "Hanken Grotesk Variable", sans-serif;
   --font-mono: "Roboto Mono Variable", monospace;
   --font-serif: "Instrument Serif", serif;
-  
+
   --breakpoint-xs: 30rem;
-  
+
   --animate-reverse-spin: reverse-spin 1s linear infinite;
 }
 

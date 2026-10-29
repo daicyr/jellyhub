@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { Fingerprint, ShieldCheck } from "lucide-react";
+import {
+  EllipsisVertical,
+  Fingerprint,
+  ShieldCheck,
+  Trash2,
+} from "lucide-react";
 import { format } from "date-fns";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import Badge from "../ui/badge";
@@ -12,7 +17,7 @@ import {
   MenuItem,
   MenuTrigger,
 } from "../ui/menu";
-import { EllipsisVertical, Trash2 } from "lucide-react";
+
 import { ExternalLink } from "../ui/link";
 import Skeleton from "../ui/skeleton";
 import DeleteSsoDialog from "./delete-sso-dialog";

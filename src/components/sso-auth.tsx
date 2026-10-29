@@ -1,11 +1,11 @@
-import { ssoPublicProviders } from "@/functions/sso.functions";
 import { useQuery } from "@tanstack/react-query";
-import { Alert } from "./ui/alert";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { Alert } from "./ui/alert";
 import Button from "./ui/button";
 import Skeleton from "./ui/skeleton";
 import LoaderIcon from "./ui/loader-icon";
+import { authClient } from "@/lib/auth-client";
+import { ssoPublicProviders } from "@/functions/sso.functions";
 
 export default function SsoAuth() {
   const { data, isFetching, isError, error } = useQuery({

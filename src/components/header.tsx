@@ -1,6 +1,6 @@
 import { Clapperboard, Cog, Disc3, House, LogOut, Tv2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import { AvatarFallback, AvatarImg, Avatar } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImg } from "./ui/avatar";
 import Skeleton from "./ui/skeleton";
 import type { LinkProps } from "@tanstack/react-router";
 import type { ReactElement } from "react";

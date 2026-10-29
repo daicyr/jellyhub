@@ -1,16 +1,14 @@
-import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
-import Button from "../ui/button";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
+import { useNavigate } from "@tanstack/react-router";
+import Button from "../ui/button";
 import { FieldError, FieldLabel, FieldRoot } from "../ui/field";
 import { Input } from "../ui/input";
 import LoaderIcon from "../ui/loader-icon";
 import { Alert } from "../ui/alert";
-import {
-  deleteAccountSchema,
-  type deleteAccountSchemaType,
-} from "@/schemas/settings.schema";
-import { useNavigate } from "@tanstack/react-router";
+import type { deleteAccountSchemaType } from "@/schemas/settings.schema";
+import { deleteAccountSchema } from "@/schemas/settings.schema";
+import { authClient } from "@/lib/auth-client";
 
 const defaultValues: deleteAccountSchemaType = {
   confirm: "",
