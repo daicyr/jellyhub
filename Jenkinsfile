@@ -52,11 +52,11 @@ pipeline {
                 sh 'bun install --frozen-lockfile'
             }
         }
-        // stage('Lint') {
-        //     steps {
-        //         sh 'bun run lint'
-        //     }
-        // }
+        stage('Lint') {
+            steps {
+                sh 'bun run lint'
+            }
+        }
         stage('Fmt') {
             steps {
                 sh 'bun run fmt:check'
