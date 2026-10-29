@@ -60,28 +60,12 @@ pipeline {
                 echo 'Build Docker image'
                 sh """
                     docker compose build
-                    docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
-                    docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
+                    docker tag ${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                    docker tag ${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:latest
                     docker image rm ${APP_NAME}
                 """
             }
         }
-        // stage('Staging - Build Image') {
-        //     when {
-        //         branch 'staging'
-        //     }
-        //     steps {
-        //         withCredentials([file(credentialsId: 'jellyhub_STAGING_ENV', variable: 'ENV_FILE')]) {
-        //             sh '''
-        //                 cp $ENV_FILE ${WORKSPACE}/.env
-        //                 docker compose build
-        //                 docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:${TAG}
-        //                 docker tag ${APP_NAME} staging-${DOCKER_USER}/${APP_NAME}:latest
-        //                 docker image rm ${APP_NAME}:latest
-        //             '''
-        //         }
-        //     }
-        // }
         stage('Staging - Analyze Image') {
             when {
                 branch 'staging'
