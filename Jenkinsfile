@@ -55,9 +55,17 @@ pipeline {
 
         stage('E2E Tests') {
             steps {
+                sh 'bun run test:e2e:install'
+                sh 'docker compose -f tests/compose.e2e.yaml up -d --wait'
                 sh 'bun run test:e2e'
             }
+            post {
+                always {
+                    sh 'docker compose -f tests/compose.e2e.yaml down -v'
+                }
+            }
         }
+
         stage('SonarQube analysis') {
             steps {
                 script {
