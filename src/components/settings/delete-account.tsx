@@ -6,11 +6,8 @@ import { FieldError, FieldLabel, FieldRoot } from "../ui/field";
 import { Input } from "../ui/input";
 import LoaderIcon from "../ui/loader-icon";
 import { Alert } from "../ui/alert";
-import type {deleteAccountSchemaType} from "@/schemas/settings.schema";
-import {
-  deleteAccountSchema
-  
-} from "@/schemas/settings.schema";
+import type { deleteAccountSchemaType } from "@/schemas/settings.schema";
+import { deleteAccountSchema } from "@/schemas/settings.schema";
 import { authClient } from "@/lib/auth-client";
 
 const defaultValues: deleteAccountSchemaType = {

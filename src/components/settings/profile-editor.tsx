@@ -6,11 +6,8 @@ import { Input } from "../ui/input";
 import LoaderIcon from "../ui/loader-icon";
 import { Alert } from "../ui/alert";
 import AvatarEditor from "../users/avatar-editor";
-import type {editProfileSchemaType} from "@/schemas/settings.schema";
-import {
-  editProfileSchema
-  
-} from "@/schemas/settings.schema";
+import type { editProfileSchemaType } from "@/schemas/settings.schema";
+import { editProfileSchema } from "@/schemas/settings.schema";
 import { authClient } from "@/lib/auth-client";
 
 export default function ProfileEditor() {

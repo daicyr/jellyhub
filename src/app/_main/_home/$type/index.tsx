@@ -3,7 +3,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { SearchX, ServerOff } from "lucide-react";
 import { Suspense, useState } from "react";
 import type { getJellyData } from "@/functions/server.functions";
-import type {ServersItems} from "@/functions/jellyfin.functions";
+import type { ServersItems } from "@/functions/jellyfin.functions";
 import ItemCard, { ItemCardLoading } from "@/components/item/item-card";
 import SearchBar from "@/components/search-bar";
 import Button from "@/components/ui/button";
