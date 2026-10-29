@@ -17,12 +17,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-                publishChecks name: 'JellyHub CI',
-                    status: 'IN_PROGRESS',
-                    conclusion: 'NONE',
-                    title: 'CI running',
-                    summary: 'CI is running.',
-                    detailsURL: env.BUILD_URL
             }
         }
 
@@ -152,20 +146,6 @@ pipeline {
         }
     }
     post {
-        always {
-            script {
-                def result = currentBuild.currentResult
-                def conclusion = result == 'SUCCESS' ? 'SUCCESS' :
-                    result == 'ABORTED' ? 'CANCELED' : 'FAILURE'
-
-                publishChecks name: 'JellyHub CI',
-                    status: 'COMPLETED',
-                    conclusion: conclusion,
-                    title: "CI ${result.toLowerCase()}",
-                    summary: "JellyHub CI finished with result: ${result}. See the Jenkins build for logs.",
-                    detailsURL: env.BUILD_URL
-            }
-        }
         success {
             echo 'Pipeline succeed'
         }
