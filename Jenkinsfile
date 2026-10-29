@@ -69,7 +69,7 @@ pipeline {
                 branch 'staging'
             }
             steps {
-                bat "trivy image --severity HIGH,CRITICAL --no-progress --exit-code 1 app-pipeline_staging-app"
+                sh 'trivy image --severity HIGH,CRITICAL --no-progress --exit-code 1 app-pipeline_staging-app'
             }
         }
         stage('Staging - Push Docker image to DockerHub') {
