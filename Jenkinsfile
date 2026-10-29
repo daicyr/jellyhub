@@ -58,7 +58,7 @@ pipeline {
             }
             steps {
                 sh """
-                    docker build -t --name staging-${APP_NAME} .
+                    docker build -t staging-${APP_NAME} .
                     docker tag staging-${APP_NAME} ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
                     docker tag staging-${APP_NAME}-app ${DOCKER_USER}/staging-${APP_NAME}:latest
                 """
