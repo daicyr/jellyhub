@@ -27,7 +27,7 @@ pipeline {
                         echo 'Bun already installed. Skipping installation.'
                     else
                         echo 'Installing Bun...'
-                        curl -fsSL https://bun.sh/install | bash -s 'bun-v1.1.34'
+                        curl -fsSL https://bun.sh/install | bash -s 'bun-v1.4.4'
                     fi
                     bun --version
                 """
