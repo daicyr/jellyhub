@@ -14,13 +14,6 @@ pipeline {
     }
 
     stages {
-        stage('Configure') {
-            steps {
-                script {
-                    env.TAG = env.GIT_COMMIT ? env.GIT_COMMIT.take(7) : env.BUILD_NUMBER
-                }
-            }
-        }
         stage('Checkout') {
             steps {
                 checkout scm
