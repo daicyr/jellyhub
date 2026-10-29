@@ -18,9 +18,9 @@ pipeline {
             steps {
                 checkout scm
                 script {
-                    env.TEST = "test"
+                    env.GIT_COMMIT_SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                 }
-                echo "${env.TEST}"
+                echo "${GIT_COMMIT_SHA}"
             }
         }
 
