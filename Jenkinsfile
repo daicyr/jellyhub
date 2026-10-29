@@ -8,9 +8,9 @@ pipeline {
     environment {
         BUN_INSTALL = "${WORKSPACE}/.bun"
         PATH = "${WORKSPACE}/.bun/bin:${env.PATH}"
-        APP_NAME = 'jellyhub-app'
-        DOCKER_USER = 'daicyr'
-        TAG = "${env.GIT_COMMIT}"
+        APP_NAME = "jellyhub-app"
+        DOCKER_USER = "daicyr"
+        TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
