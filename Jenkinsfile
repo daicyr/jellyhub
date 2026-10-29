@@ -97,16 +97,6 @@ pipeline {
             }
         }
 
-        stage('Staging - Clean local Docker image') {
-            steps {
-                sh """
-                    docker image rm staging-${APP_NAME}
-                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
-                    docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
-                """
-            }
-        }
-
         /**************/
         /* Production */
         /**************/
@@ -150,6 +140,18 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed'
+        }
+        finally {
+            echo 'Cleaning Docker image'
+            sh """
+                docker image rm staging-${APP_NAME}
+                docker image rm ${DOCKER_USER}/staging-${APP_NAME}:${TAG}
+                docker image rm ${DOCKER_USER}/staging-${APP_NAME}:latest
+
+                docker image rm production-${APP_NAME}
+                docker image rm ${DOCKER_USER}/production-${APP_NAME}:${TAG}
+                docker image rm ${DOCKER_USER}/production-${APP_NAME}:latest
+            """
         }
     }
 }
