@@ -79,7 +79,7 @@ pipeline {
                 branch 'staging'
             }
             environment {
-                registryCredential = 'docker-hub-auth'
+                registryCredential = 'DOCKER_HUB_CREDENTIALS'
             }
             steps {
                 echo 'push image to github container registry'
