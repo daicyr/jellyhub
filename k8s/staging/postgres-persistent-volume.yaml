@@ -1,0 +1,20 @@
+# Stockage local : conserver PostgreSQL sur ce nœud.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    app: postgresdb
+    type: local
+  name: postgresdb-staging-persistent-volume
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 8Gi
+  claimRef:
+    name: db-persistent-volume-claim
+    namespace: jellyhub-staging
+  hostPath:
+    path: /data/jellyhub-staging/db
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual

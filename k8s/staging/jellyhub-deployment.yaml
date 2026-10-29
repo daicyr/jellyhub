@@ -1,0 +1,33 @@
+# Remplacer latest par le tag Jenkins validé pour cet environnement.
+# Créer jellyhub-secrets et db-secrets dans ce namespace.
+# DATABASE_URL doit cibler postgresdb:5432/jellyhub, pas le namespace default.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyhub
+  namespace: jellyhub-staging
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jellyhub
+  template:
+    metadata:
+      labels:
+        app: jellyhub
+    spec:
+      containers:
+        - env:
+            - name: APP_URL
+              value: http://192.168.1.134:30085
+            - name: BETTER_AUTH_URL
+              value: http://192.168.1.134:30085
+            - name: ALLOW_SIGNUP
+              value: 'false'
+          envFrom:
+            - secretRef:
+                name: jellyhub-secrets
+          image: daicyr/staging-jellyhub-app:latest
+          name: jellyhub
+          ports:
+            - containerPort: 3000
