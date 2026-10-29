@@ -74,7 +74,7 @@ pipeline {
                         -v /var/run/docker.sock:/var/run/docker.sock \
                         -v trivy-cache:/root/.cache/ \
                         aquasec/trivy:latest image \
-                            --severity CRITICAL \
+                            --severity HIGH,CRITICAL \
                             --exit-code 1 \
                             staging-${APP_NAME}
                 """
@@ -105,8 +105,11 @@ pipeline {
                 branch 'production'
             }
             steps {
-                // build docker image
-                echo 'build docker image'
+                sh """
+                    docker build -t production-${APP_NAME} .
+                    docker tag production-${APP_NAME} ${DOCKER_USER}/production-${APP_NAME}:${TAG}
+                    docker tag production-${APP_NAME} ${DOCKER_USER}/production-${APP_NAME}:latest
+                """
             }
         }
         stage('Production - Analyze Image') {
@@ -114,23 +117,31 @@ pipeline {
                 branch 'production'
             }
             steps {
-                // analyze docker image with trivy scan
-                echo 'analyze docker image with trivy scan'
+                sh """
+                    docker run --rm \
+                        -v /var/run/docker.sock:/var/run/docker.sock \
+                        -v trivy-cache:/root/.cache/ \
+                        aquasec/trivy:latest image \
+                            --severity HIGH,CRITICAL \
+                            --exit-code 1 \
+                            production-${APP_NAME}
+                """
             }
         }
-        stage('Production - Push image to ghcr.io') {
+        stage('Production - Push Docker image to DockerHub') {
             when {
                 branch 'production'
             }
-            steps {
-                // push image to github container registry
-                echo 'push image to github container registry'
+            environment {
+                registryCredential = 'DOCKER_HUB_CREDENTIALS'
             }
-        }
-        stage('Production - Clean local Docker image') {
             steps {
-                // push image to github container registry
-                echo 'Clean local Docker image'
+                script {
+                    docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
+                        docker.image("${DOCKER_USER}/production-${APP_NAME}:${TAG}").push()
+                        docker.image("${DOCKER_USER}/production-${APP_NAME}:latest").push()
+                    }
+                }
             }
         }
     }
@@ -142,6 +153,7 @@ pipeline {
             echo 'Pipeline failed'
         }
         cleanup {
+            echo 'Clean Docker images'
             sh 'docker image prune -a -f'
         }
     }
