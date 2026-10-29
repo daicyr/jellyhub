@@ -11,7 +11,7 @@ pipeline {
         APP_NAME = "jellyhub-app"
         DOCKER_USER = "daicyr"
         TAG = "${env.BUILD_NUMBER}"
-        TEST = ""
+        TEST = "a"
     }
 
     stages {
