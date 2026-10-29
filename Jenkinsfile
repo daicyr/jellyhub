@@ -52,6 +52,12 @@ pipeline {
                 sh 'bun run test'
             }
         }
+
+        stage('E2E Tests') {
+            steps {
+                sh 'bun run test:e2e'
+            }
+        }
         stage('SonarQube analysis') {
             steps {
                 script {
