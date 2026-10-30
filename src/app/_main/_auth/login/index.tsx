@@ -64,7 +64,7 @@ function RouteComponent() {
   });
 
   return (
-    <div className="max-w-sm w-full p-6 rounded-xl space-y-8 bg-green-400">
+    <div className="max-w-sm w-full p-6 rounded-xl space-y-8 bg-accent-foreground">
       <h3 className="font-serif italic text-3xl font-semibold text-foreground">
         Login to continue
       </h3>
