@@ -9,5 +9,5 @@ export default [
       "@typescript-eslint/no-unnecessary-condition": "off"
     },
   },
-  globalIgnores(["node_modules", ".output", ".bun"]),
+  globalIgnores(["node_modules", ".output", ".bun", "playwright-report", "test-results"]),
 ];
